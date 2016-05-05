@@ -9,7 +9,7 @@ Compo is a Sketch plugin that makes it easier to work with interface components.
 1. Download and unzip: [compo-sketch-master.zip].
 2. Open Sketch.app, go to `Plugins → Reveal Plugins Folder...` and place `Compo.sketchplugin` there.
 
-[compo-sketch-master.zip]: https://github.com/romashamin/compo-sketch-sketch/archive/master.zip
+[compo-sketch-master.zip]: https://github.com/romashamin/compo-sketch/archive/master.zip
 
 ### System Requirements
 
