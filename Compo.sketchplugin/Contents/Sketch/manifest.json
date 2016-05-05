@@ -1,0 +1,25 @@
+{
+  "name": "Compo",
+  "description": "Makes it easier to work with interface components",
+  "author": "Roman Shamin",
+  "homepage": "https://github.com/romashamin/compo-sketch",
+  "version": 1.0,
+  "identifier": "com.github.romashamin.compo-sketch",
+  "updateURL": "https://github.com/romashamin/compo-sketch",
+  "compatibleVersion": 3,
+  "bundleVersion": 1.0,
+  "commands": [
+    {
+      "name": "Create Component or Update Selected",
+      "identifier": "update-component",
+      "shortcut": "cmd j",
+      "script": "Compo.cocoascript",
+      "handler": "onRun"
+    }
+  ],
+  "menu": {
+    "items": [
+      "update-component"
+    ]
+  }
+}

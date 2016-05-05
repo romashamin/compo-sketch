@@ -1,0 +1,416 @@
+/**
+ * Compo 1.0
+ *
+ * Copyright © 2016 Roman Shamin https://github.com/romashamin
+ * and licenced under the MIT licence. All rights not explicitly
+ * granted in the MIT license are reserved. See the included
+ * LICENSE file for more details.
+ *
+ * https://github.com/romashamin/
+ * https://twitter.com/romanshamin
+ */
+
+
+
+var defaultNamePrefix   = 'UI/'
+var defaultNamePostfix  = ' Component'
+var defaultPaddingsName = '12:18:12:18'
+var masterLayerRE       = /\d+:\d+:\d+:\d+/g
+var bgNames             = ['BG', 'Background']
+
+
+
+/**
+ * @param {String} strColor
+ * @param {CGRect} cgrect
+ */
+
+function createRect(strColor, cgrect) {
+  var shape = [[MSRectangleShape alloc] init]
+  [shape setFrame:[MSRect rectWithRect:cgrect]]
+
+  var shapeGroup = [MSShapeGroup shapeWithPath:shape]
+
+  var fill = [[[shapeGroup style] fills] addNewStylePart]
+  var color = [MSColor colorWithSVGString:strColor]
+  [fill setColor:color]
+
+  return shapeGroup
+}
+
+var createBackgroundRect = createRect.bind(null, '#D8D8D8')
+
+
+
+/**
+ * @param {MSArray} layers
+ * @param {Array} exceptions
+ * @return {Array}
+ */
+
+function getLayersExcept(layers, exceptions) {
+  var resultLayers = []
+
+  for (var i = 0; i < [layers count]; i++) {
+    var currentLayer = [layers objectAtIndex:i]
+    var isCurrentLayerInExceptionsList = false
+
+    for (var j = 0; j < exceptions.length; j++) {
+      var currentException = exceptions[j]
+
+      if (currentLayer == currentException) {
+        isCurrentLayerInExceptionsList = true
+        break
+      }
+    }
+
+    if (!isCurrentLayerInExceptionsList) resultLayers.push(currentLayer)
+  }
+
+  return resultLayers
+}
+
+
+
+/**
+ * Parse layer’s name and return a bounding rectangle
+ * @param {MSLayerGroup|MSShapeGroup|MSTextLayer} layer
+ * @return {CGRect|undefined}
+ */
+
+function cgrectFromLayerName(layer) {
+  var layerName = [layer name]
+
+  var parseResult = layerName.match(masterLayerRE)
+
+  if (parseResult) {
+    var paddingsStrValues = parseResult[0].split(':')
+
+    var paddingTop    = parseInt(paddingsStrValues[0], 10)
+    var paddingRight  = parseInt(paddingsStrValues[1], 10)
+    var paddingBottom = parseInt(paddingsStrValues[2], 10)
+    var paddingLeft   = parseInt(paddingsStrValues[3], 10)
+
+    var layerCGRect = [layer rect]
+
+    var x = layerCGRect.origin.x - paddingLeft
+    var y = layerCGRect.origin.y - paddingTop
+    var w = layerCGRect.size.width + paddingLeft + paddingRight
+    var h = layerCGRect.size.height + paddingTop + paddingBottom
+
+    return CGRectMake(x, y, w, h)
+  }
+
+  return undefined
+}
+
+
+
+/**
+ * Creates MSLayerGroup
+ * @param {String} name
+ * @return {MSLayerGroup}
+ */
+
+function createGroup(name) {
+  var group = [MSLayerGroup new]
+  var groupFrame = [group frame]
+  [groupFrame setConstrainProportions:false]
+  [group setName:name]
+
+  return group
+}
+
+
+
+/**
+ * Creates a button group
+ * @param {MSTextLayer|MSShapeGroup} layer
+ */
+
+function createButton(layer) {
+  var name = [layer class] == [MSTextLayer class] ? [layerSelected stringValue] : [layerSelected name]
+
+  var group = createGroup(defaultNamePrefix + name + defaultNamePostfix)
+  var parentGroup = [layer parentGroup]
+
+  var cgrectLayer = cgrectFromLayerName(layer)
+  if (!cgrectLayer) {
+    [layer setName: defaultPaddingsName]
+    cgrectLayer = cgrectFromLayerName(layer)
+  }
+
+  var bgRect = createBackgroundRect(cgrectLayer)
+  [bgRect setName:bgNames[0]]
+
+  [parentGroup addLayers:[group]]
+  [parentGroup removeLayer:layer]
+  [group addLayers:[bgRect, layer]]
+  [group resizeToFitChildrenWithOption:1]
+}
+
+
+
+/**
+ * Searches for the master layer
+ * @param {MSArray} layers
+ * @return {MSTextLayer|MSShapeGroup|undefined}
+ */
+
+function getMasterLayer(layers) {
+  for (var i = 0; i < [layers count]; i++) {
+   var layer = [layers objectAtIndex:i]
+
+   if ([layer name].search(masterLayerRE) > -1) return layer
+  }
+
+  return undefined
+}
+
+
+
+/**
+ * Searches for the background layer
+ * @param {MSArray} layers
+ * @return {MSTextLayer|MSShapeGroup|undefined}
+ */
+
+function getBackgroundLayer(layers) {
+  for (var i = 0; i < [layers count]; i++) {
+   var layer = [layers objectAtIndex:i]
+   var strName = [layer name]
+
+   for (var j = 0; j < bgNames.length; j++) {
+     if (strName.toLowerCase().indexOf(bgNames[j].toLowerCase()) >= 0) {
+       return layer
+     }
+   }
+  }
+
+  return undefined
+}
+
+
+
+/**
+ * Resizes a background layer according master layer name
+ * @param {MSShapeGroup} backgroundLayer
+ */
+
+function resizeBackground(backgroundLayer, masterLayer) {
+  var cgrectMaster = cgrectFromLayerName(masterLayer)
+  var bgFrame = [backgroundLayer frame]
+
+  if (bgFrame.x != cgrectMaster.origin.x) [bgFrame setX:cgrectMaster.origin.x]
+  if (bgFrame.y != cgrectMaster.origin.y) [bgFrame setY:cgrectMaster.origin.y]
+  if (bgFrame.width != cgrectMaster.size.width) [bgFrame setWidth:cgrectMaster.size.width]
+  if (bgFrame.height != cgrectMaster.size.height) [bgFrame setHeight:cgrectMaster.size.height]
+}
+
+
+
+/**
+ * Searches for margin codes in the given name
+ * @param {String} name
+ * @return {}
+ */
+
+function getMarginsFromName(name) {
+  var margins = {
+    top:    undefined,
+    right:  undefined,
+    bottom: undefined,
+    left:   undefined
+  }
+
+  var re = {
+    top:    /t:\d+/g,
+    right:  /r:\d+/g,
+    bottom: /b:\d+/g,
+    left:   /l:\d+/g
+  }
+
+  var arrTop = re.top.exec(name)
+  if (arrTop) {
+    var prefixAndValue = arrTop[0].split(':')
+    margins.top = parseInt(prefixAndValue[1], 10)
+  }
+
+  var arrRight = re.right.exec(name)
+  if (arrRight) {
+    var prefixAndValue = arrRight[0].split(':')
+    margins.right = parseInt(prefixAndValue[1], 10)
+  }
+
+  var arrBottom = re.bottom.exec(name)
+  if (arrBottom) {
+    var prefixAndValue = arrBottom[0].split(':')
+    margins.bottom = parseInt(prefixAndValue[1], 10)
+  }
+
+  var arrLeft = re.left.exec(name)
+  if (arrLeft) {
+    var prefixAndValue = arrLeft[0].split(':')
+    margins.left = parseInt(prefixAndValue[1], 10)
+  }
+
+  return margins
+}
+
+
+
+/**
+ * @param {MSLayerGroup|MSShapeGroup|MSTextLayer} layer
+ * @param {MSLayerGroup|MSShapeGroup} backgroundLayer
+ */
+
+function alignCenter(layer, background) {
+  var bgFrame = [background frame]
+  var layerFrame = [layer frame]
+
+  [layerFrame setX: [bgFrame x] + Math.floor([bgFrame width] / 2 - [layerFrame width] / 2)]
+  [layerFrame setY: [bgFrame y] + Math.floor([bgFrame height] / 2 - [layerFrame height] / 2)]
+}
+
+function alignTop(margin, layer, background) {
+  var bgFrame = [background frame]
+  var layerFrame = [layer frame]
+
+  [layerFrame setY: margin + [bgFrame y]]
+}
+
+function alignBottom(margin, layer, background) {
+  var bgFrame = [background frame]
+  var layerFrame = [layer frame]
+
+  [layerFrame setY: [bgFrame y] + [bgFrame height] - [layerFrame height] - margin]
+}
+
+function alignLeft(margin, layer, background) {
+  var bgFrame = [background frame]
+  var layerFrame = [layer frame]
+
+  [layerFrame setX: margin + [bgFrame x]]
+}
+
+function alignRight(margin, layer, background) {
+  var bgFrame = [background frame]
+  var layerFrame = [layer frame]
+
+  [layerFrame setX: [bgFrame x] + [bgFrame width] - [layerFrame width] - margin]
+}
+
+
+
+/**
+ * Moves a layer according its settings
+ * @param {MSLayerGroup|MSShapeGroup|MSTextLayer} layer
+ * @param {MSShapeGroup|undefined} backgroundLayer
+ */
+
+function moveLayer(layer, backgroundLayer) {
+  var margins = getMarginsFromName([layer name])
+  var background = (backgroundLayer ? backgroundLayer : [layer parentGroup])
+
+  alignCenter(layer, background)
+
+  if ((margins.top != undefined && margins.bottom != undefined) || margins.top != undefined) {
+    alignTop(margins.top, layer, background)
+  } else if (margins.bottom != undefined) {
+    alignBottom(margins.bottom, layer, background)
+  }
+
+  if ((margins.left != undefined && margins.right != undefined) || margins.left != undefined) {
+    alignLeft(margins.left, layer, background)
+  } else if (margins.right != undefined) {
+    alignRight(margins.right, layer, background)
+  }
+}
+
+
+
+/**
+ * Distributes layers within a group
+ * @param {Array} layers
+ * @param {MSShapeGroup|undefined} backgroundLayer
+ */
+
+function distributeLayers(layers, backgroundLayer) {
+  for (var i = 0; i < layers.length; i++) {
+    moveLayer(layers[i], backgroundLayer)
+  }
+}
+
+
+
+/**
+ * Process the group
+ * @param {MSLayerGroup} group
+ */
+
+function processGroup(group) {
+  var layers = [group layers]
+
+  var masterLayer = getMasterLayer(layers)
+  log('masterLayer: ' + masterLayer)
+  var backgroundLayer = getBackgroundLayer(layers)
+  var exceptionList = []
+
+  if (masterLayer) {
+    resizeBackground(backgroundLayer, masterLayer)
+    [group resizeToFitChildrenWithOption:1]
+    exceptionList = [masterLayer, backgroundLayer]
+  } else {
+    exceptionList = [backgroundLayer]
+  }
+
+  var layersExceptList = getLayersExcept(layers, exceptionList)
+  distributeLayers(layersExceptList, backgroundLayer)
+  [group resizeToFitChildrenWithOption:1]
+}
+
+
+
+/**
+ * Creates a button group for text layers
+ * and distributes layers within groups
+ * @param {MSLayerGroup|MSShapeGroup|MSTextLayer} layer
+ */
+
+function processSelection(layer) {
+  if ([layer class] == [MSLayerGroup class]) {
+    processGroup(layer)
+  } else {
+    var parentGroup = [layer parentGroup]
+
+    if ([parentGroup class] != [MSArtboardGroup class] && getBackgroundLayer([parentGroup layers])) {
+      processGroup(parentGroup)
+    } else {
+      createButton(layer)
+    }
+  }
+}
+
+
+
+/**
+ * Entry point
+ * @param {NSDictionary} context
+ */
+
+function onRun(context) {
+  var doc        = context.document
+  var selection  = [doc findSelectedLayers]
+  var pluginName = 'Compo'
+
+  if ([selection count] > 0) {
+    var loopSelection = [selection objectEnumerator]
+    while (layerSelected = [loopSelection nextObject]) {
+      processSelection(layerSelected)
+    }
+  } else {
+    [doc showMessage: pluginName + ': select something']
+  }
+}
+
+onRun(context)
