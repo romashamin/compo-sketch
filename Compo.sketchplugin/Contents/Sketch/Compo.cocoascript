@@ -136,7 +136,8 @@ function createButton(layer) {
 
   var cgrectLayer = cgrectFromLayerName(layer)
   if (!cgrectLayer) {
-    [layer setName: defaultPaddingsName]
+    [layer setName:defaultPaddingsName]
+    layer.nameIsFixed = 1
     cgrectLayer = cgrectFromLayerName(layer)
   }
 
