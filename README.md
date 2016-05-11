@@ -4,6 +4,8 @@
 
 Compo is a Sketch plugin that makes it easier to work with interface components. With Compo, pressing ⌘J is all it takes to turn a text layer into a button or put an existing component in order. The plugin is especially effective if used jointly with [State Machine](https://github.com/romashamin/statemachine-sketch).
 
+Read more about [how Compo works](https://evilmartians.com/chronicles/compo-sketch).
+
 ### Install
 
 1. Download and unzip: [compo-sketch-master.zip].
