@@ -11,7 +11,7 @@ Read more about [how Compo works](https://evilmartians.com/chronicles/compo-sket
 ### Install
 
 1. Download and unzip: [compo-sketch-master.zip].
-2. Open Sketch.app, go to `Plugins → Reveal Plugins Folder...` and place `Compo.sketchplugin` there.
+2. Open Sketch.app, go to `Plugins → Manage Plugins... → (Gear Icon in the bottom left corner) → Show Plugins Folder` and place `Compo.sketchplugin` there.
 
 [compo-sketch-master.zip]: https://github.com/romashamin/compo-sketch/archive/master.zip
 
