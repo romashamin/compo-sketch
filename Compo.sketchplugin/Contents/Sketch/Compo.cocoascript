@@ -217,6 +217,9 @@ function resizeBackground(backgroundLayer, masterLayer) {
  */
 
 function getMarginsFromName(name) {
+
+  name = name.toLowerCase();
+
   var margins = {
     top:    undefined,
     right:  undefined,
