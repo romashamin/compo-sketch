@@ -10,13 +10,10 @@ Read more about [how Compo works](https://evilmartians.com/chronicles/compo-sket
 
 ### Install
 
-1. Download and unzip:
-  - [compo-sketch-master.zip] for Sketch 3.7.2
-  - [compo-sketch-sketch-3.8.zip] for Sketch 3.8 Beta
-2. Open Sketch.app, go to `Plugins → Manage Plugins... → (Gear Icon in the bottom left corner) → Show Plugins Folder` and place `Compo.sketchplugin` there.
+1. Download and unzip: [compo-sketch-master.zip].
+2. Double click `Compo.sketchplugin`.
 
 [compo-sketch-master.zip]: https://github.com/romashamin/compo-sketch/archive/master.zip
-[compo-sketch-sketch-3.8.zip]: https://github.com/romashamin/compo-sketch/archive/sketch-3.8.zip
 
 ### System Requirements
 

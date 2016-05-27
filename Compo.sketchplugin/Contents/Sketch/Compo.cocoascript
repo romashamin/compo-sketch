@@ -1,5 +1,5 @@
 /**
- * Compo 1.1
+ * Compo 1.2
  *
  * Copyright © 2016 Roman Shamin https://github.com/romashamin
  * and licenced under the MIT licence. All rights not explicitly
@@ -31,7 +31,7 @@ function createRect(strColor, cgrect) {
 
   var shapeGroup = [MSShapeGroup shapeWithPath:shape]
 
-  var fill = [[[shapeGroup style] fills] addNewStylePart]
+  var fill = [[shapeGroup style] addStylePartOfType:0]
   var color = [MSColor colorWithSVGString:strColor]
   [fill setColor:color]
 
