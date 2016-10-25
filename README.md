@@ -15,6 +15,28 @@ Read more about [how Compo works](https://evilmartians.com/chronicles/compo-sket
 
 [compo-sketch-master.zip]: https://github.com/romashamin/compo-sketch/archive/master.zip
 
+### Syntax
+
+`<top>:<right>:<bottom>:<left>`
+
+or
+
+- top `t:<top>`
+- right `r:<right>`
+- bottom `b:<bottom>`
+- left `l:<left>`
+- vertical `v:[-/+]<vertical>`
+- horizontal `h:[-/+]<horizontal>`
+
+#### Examples
+
+- `10:20:10:20`
+- `t:10`
+- `t:10 r:20`
+- `v:20`
+- `v:-20`
+- `h:-10 t:10`
+
 ### System Requirements
 
 Compo has been tested on Sketch 3.7.2 on OS X Yosemite. If you have any problems, drop me a line: [@romanshamin].
