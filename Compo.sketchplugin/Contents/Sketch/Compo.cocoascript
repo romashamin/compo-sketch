@@ -1,5 +1,5 @@
 /**
- * Compo 1.2
+ * Compo 1.3
  *
  * Copyright © 2016 Roman Shamin https://github.com/romashamin
  * and licenced under the MIT licence. All rights not explicitly
@@ -25,20 +25,20 @@ var bgNames             = ['BG', 'Background']
  * @param {CGRect} cgrect
  */
 
-function createRect(strColor, cgrect) {
+function createRect(nsColor, cgrect) {
   var shape = [[MSRectangleShape alloc] init]
   [shape setFrame:[MSRect rectWithRect:cgrect]]
 
   var shapeGroup = [MSShapeGroup shapeWithPath:shape]
 
   var fill = [[shapeGroup style] addStylePartOfType:0]
-  var color = [MSColor colorWithSVGString:strColor]
+  var color = [MSColor colorWithNSColor:nsColor]
   [fill setColor:color]
 
   return shapeGroup
 }
 
-var createBackgroundRect = createRect.bind(null, '#D8D8D8')
+var createBackgroundRect = createRect.bind(null, NSColor.colorWithGray(0.8))
 
 
 

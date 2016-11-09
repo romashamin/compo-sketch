@@ -39,7 +39,7 @@ or
 
 ### System Requirements
 
-Compo has been tested on Sketch 3.7.2 on OS X Yosemite. If you have any problems, drop me a line: [@romanshamin].
+Compo has been tested on Sketch 41 on OS X Yosemite. If you have any problems, drop me a line: [@romanshamin].
 
 [@romanshamin]: https://twitter.com/romanshamin
 
