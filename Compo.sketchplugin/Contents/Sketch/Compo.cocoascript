@@ -1,5 +1,5 @@
 /**
- * Compo 1.3
+ * Compo 1.4
  *
  * Copyright © 2016 Roman Shamin https://github.com/romashamin
  * and licenced under the MIT licence. All rights not explicitly
@@ -404,7 +404,7 @@ function processSelection(layer) {
 
 function onRun(context) {
   var doc        = context.document
-  var selection  = [doc findSelectedLayers]
+  var selection  = context.selection
   var pluginName = 'Compo'
 
   if ([selection count] > 0) {
