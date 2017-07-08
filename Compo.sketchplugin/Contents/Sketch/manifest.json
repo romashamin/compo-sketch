@@ -3,7 +3,7 @@
   "description": "Makes it easier to work with interface components",
   "author": "Roman Shamin",
   "homepage": "https://github.com/romashamin/compo-sketch",
-  "version": 1.5,
+  "version": 1.6,
   "identifier": "com.github.romashamin.compo-sketch",
   "appcast": "https://raw.githubusercontent.com/romashamin/compo-sketch/master/appcast.xml",
   "compatibleVersion": 45,

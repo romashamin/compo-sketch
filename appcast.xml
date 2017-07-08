@@ -6,15 +6,15 @@
     <description>Makes it easier to work with interface components</description>
     <language>en</language>
       <item>
-        <title>Version 1.5</title>
+        <title>Version 1.6</title>
         <description>
           <![CDATA[
             <ul>
-              <li>Support for Sketch 45 plugins updating system</li>
+              <li>Test update</li>
             </ul>
           ]]>
         </description>
-        <enclosure url="https://github.com/romashamin/compo-sketch/archive/master.zip" sparkle:version="1.5" />
+        <enclosure url="https://github.com/romashamin/compo-sketch/archive/master.zip" sparkle:version="1.6" />
       </item>
   </channel>
 </rss>
