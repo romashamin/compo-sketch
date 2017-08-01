@@ -4,7 +4,7 @@
 
 <img width="192" height="30" src="https://osom.coffee/files/002/419/551/2419551/original/plugin-updates_2x.png" title="Plugin Update Badge">
 
-**Compo 1.6 supports Sketch 45 plugin updating system**
+**Compo 1.6 supports Sketch plugin updating system**
 
 Compo is a Sketch plugin that makes it easier to work with interface components. With Compo, pressing ⌘J is all it takes to turn a text layer into a button or put an existing component in order. The plugin is especially effective if used jointly with [State Machine](https://github.com/romashamin/statemachine-sketch).
 
@@ -21,7 +21,7 @@ Read more about [how Compo works](https://evilmartians.com/chronicles/compo-sket
 
 ### System Requirements
 
-Compo has been tested on Sketch 45.1 on macOS Sierra. If you have any problems, drop me a line: [@romanshamin].
+Compo has been tested on Sketch 46 on macOS Sierra. If you have any problems, drop me a line: [@romanshamin].
 
 [@romanshamin]: https://twitter.com/romanshamin
 
