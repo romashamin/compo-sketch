@@ -2,10 +2,6 @@
 
 <img width="256" height="256" src="images/compo-icon@2x.png" title="Compo Icon">
 
-<img width="192" height="30" src="https://osom.coffee/files/002/419/551/2419551/original/plugin-updates_2x.png" title="Plugin Update Badge">
-
-**Compo 1.6 supports Sketch plugin updating system**
-
 Compo is a Sketch plugin that makes it easier to work with interface components. With Compo, pressing ⌘J is all it takes to turn a text layer into a button or put an existing component in order. The plugin is especially effective if used jointly with [State Machine](https://github.com/romashamin/statemachine-sketch).
 
 <img width="800" height="500" src="images/compo-explanation@2x.png" title="How Compo works">
