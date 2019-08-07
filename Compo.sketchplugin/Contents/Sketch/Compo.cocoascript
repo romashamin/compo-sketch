@@ -221,17 +221,33 @@ function getMarginsFromName(name) {
   name = name.toLowerCase();
 
   var margins = {
-    top:    undefined,
-    right:  undefined,
-    bottom: undefined,
-    left:   undefined
+    vertical:   undefined,
+    horizontal: undefined,
+    top:        undefined,
+    right:      undefined,
+    bottom:     undefined,
+    left:       undefined
   }
 
   var re = {
-    top:    /t:\d+/g,
-    right:  /r:\d+/g,
-    bottom: /b:\d+/g,
-    left:   /l:\d+/g
+    vertical:   /v:[-+]?\d+/g,
+    horizontal: /h:[-+]?\d+/g,
+    top:        /t:\d+/g,
+    right:      /r:\d+/g,
+    bottom:     /b:\d+/g,
+    left:       /l:\d+/g
+  }
+
+  var arrVert = re.vertical.exec(name)
+  if (arrVert) {
+    var prefixAndValue = arrVert[0].split(':')
+    margins.vertical = parseInt(prefixAndValue[1], 10)
+  }
+
+  var arrHori = re.horizontal.exec(name)
+  if (arrHori) {
+    var prefixAndValue = arrHori[0].split(':')
+    margins.horizontal = parseInt(prefixAndValue[1], 10)
   }
 
   var arrTop = re.top.exec(name)
@@ -276,6 +292,20 @@ function alignCenter(layer, background) {
   [layerFrame setY: [bgFrame y] + Math.floor([bgFrame height] / 2 - [layerFrame height] / 2)]
 }
 
+function alignVertical(margin, layer, background) {
+  var bgFrame = [background frame]
+  var layerFrame = [layer frame]
+
+  [layerFrame setY: margin + [bgFrame y] + Math.floor([bgFrame height] / 2 - [layerFrame height] / 2)]
+}
+
+function alignHorizontal(margin, layer, background) {
+  var bgFrame = [background frame]
+  var layerFrame = [layer frame]
+
+  [layerFrame setX: margin + [bgFrame x] + Math.floor([bgFrame width] / 2 - [layerFrame width] / 2)]
+}
+
 function alignTop(margin, layer, background) {
   var bgFrame = [background frame]
   var layerFrame = [layer frame]
@@ -304,7 +334,9 @@ function alignRight(margin, layer, background) {
   [layerFrame setX: [bgFrame x] + [bgFrame width] - [layerFrame width] - margin]
 }
 
-
+function isNumber(x) {
+  return Object.prototype.toString.call(x) === '[object Number]';
+}
 
 /**
  * Moves a layer according its settings
@@ -317,6 +349,16 @@ function moveLayer(layer, backgroundLayer) {
   var background = (backgroundLayer ? backgroundLayer : [layer parentGroup])
 
   alignCenter(layer, background)
+
+  // top/bottom will override vertical
+  if (isNumber(margins.vertical)) {
+    alignVertical(margins.vertical, layer, background)
+  }
+
+  // right/left will override horizontal
+  if (isNumber(margins.horizontal) != undefined) {
+    alignHorizontal(margins.horizontal, layer, background)
+  }
 
   if ((margins.top != undefined && margins.bottom != undefined) || margins.top != undefined) {
     alignTop(margins.top, layer, background)
